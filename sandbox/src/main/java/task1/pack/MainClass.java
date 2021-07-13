@@ -8,7 +8,7 @@ public class MainClass {
 		Point p1 = new Point(1,2);
 		System.out.println("Первая точка с координатами (" + p1.x + ", " + p1.y + ")");
 		
-		Point p2 = new Point(2, 3);
+		Point p2 = new Point(1, 3);
 		System.out.println("Вторая точка с координатами (" + p2.x + ", " + p2.y + ")");
 		
 		System.out.println("Расстояние между двумя точками - " + p1.distance(p2));
