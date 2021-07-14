@@ -5,26 +5,20 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import ru.addressbook.model.ContactData;
 
-public class ContactHelper {
+public class ContactHelper extends HelperBase{
 	FirefoxDriver wd;
 	
 	public ContactHelper(FirefoxDriver wd) {
-		this.wd = wd;
+		super(wd);
 	}
 	
 	public void submitContactCreation() {
-		wd.findElement(By.xpath("//div[@id='content']/form/input[21]")).click();
+		click(By.xpath("//div[@id='content']/form/input[21]"));
 	}
 
 	public void fillContactForm(ContactData parameterObject) {
-		wd.findElement(By.name("firstname")).click();
-		wd.findElement(By.name("firstname")).clear();
-		wd.findElement(By.name("firstname")).sendKeys(parameterObject.getFirstName());
-	    wd.findElement(By.name("lastname")).click();
-	    wd.findElement(By.name("lastname")).clear();
-	    wd.findElement(By.name("lastname")).sendKeys(parameterObject.getLastName());
-	    wd.findElement(By.name("email")).click();
-	    wd.findElement(By.name("email")).clear();
-	    wd.findElement(By.name("email")).sendKeys(parameterObject.getEmail());
+		type(By.name("firstname"), parameterObject.getFirstName());
+		type(By.name("lastname"), parameterObject.getLastName());
+		type(By.name("email"), parameterObject.getEmail());
 	}
 }
