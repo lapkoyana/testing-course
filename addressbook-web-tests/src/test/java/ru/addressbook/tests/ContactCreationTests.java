@@ -4,7 +4,7 @@ import org.testng.annotations.*;
 
 import ru.addressbook.model.ContactData;
 
-public class AddANewContactTest extends TestBase{
+public class ContactCreationTests extends TestBase{
 	  @Test
 	  public void testAddANewContact() throws Exception {
 		  am.getNavigationHelper().clickToAddNew();

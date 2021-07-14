@@ -2,7 +2,7 @@ package ru.addressbook.tests;
 
 import org.testng.annotations.*;
 
-public class DeleteGroupTest extends TestBase{
+public class GroupDeletionTests extends TestBase{
   @Test
   public void testDeleteGroup() throws Exception {
 	  am.getNavigationHelper().clickToGroups();
