@@ -1,12 +1,9 @@
 package ru.addressbook;
 
-import java.util.regex.Pattern;
 import java.util.concurrent.TimeUnit;
 import org.testng.annotations.*;
-import static org.testng.Assert.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.Select;
 
 public class GroupCreationTests {
   private WebDriver wd;
@@ -23,22 +20,25 @@ public class GroupCreationTests {
 	    wd.findElement(By.name("user")).click();
 	    wd.findElement(By.name("user")).clear();
 	    wd.findElement(By.name("user")).sendKeys(username);
-	    wd.findElement(By.id("LoginForm")).click();
 	    wd.findElement(By.name("pass")).click();
 	    wd.findElement(By.name("pass")).clear();
 	    wd.findElement(By.name("pass")).sendKeys(password);
 	    wd.findElement(By.xpath("//input[@value='Login']")).click();
-	    wd.findElement(By.xpath("//form[@action='/addressbook/group.php']")).click();
 	}
 
   @Test
   public void testGroupCreation() throws Exception {
+	clickToGroups();
     initGroupCreation();
     fillGroupForm(new GroupData("test1", "test2", "test3"));
     submitGroupCreation();
     returnToGroupPage();
     logout();
   }
+
+private void clickToGroups() {
+	wd.findElement(By.linkText("groups")).click();
+}
 
 private void logout() {
 	wd.findElement(By.linkText("Logout")).click();
