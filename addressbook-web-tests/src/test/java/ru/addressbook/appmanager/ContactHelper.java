@@ -1,8 +1,5 @@
 package ru.addressbook.appmanager;
 
-import static org.testng.Assert.assertTrue;
-
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -29,8 +26,19 @@ public class ContactHelper extends HelperBase{
 	}
 
 	public void deletSelectedContacts() {
-//		acceptNextAlert = true;
 		click(By.xpath("//input[@value='Delete']"));
 		wd.switchTo().alert().accept();
+	}
+
+	public void gotoEditForm() {
+		click(By.xpath("//img[@alt='Edit']"));
+	}
+
+	public void submitContactModification() {
+		click(By.xpath("//div[@id='content']/form/input[22]"));
+	}
+
+	public void returnToHomePage() {
+		click(By.linkText("home page"));
 	}
 }

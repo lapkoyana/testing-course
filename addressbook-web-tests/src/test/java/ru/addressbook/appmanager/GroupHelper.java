@@ -18,7 +18,6 @@ public class GroupHelper extends HelperBase{
 	public void submitGroupCreation() {
 		click(By.name("submit"));
 		click(By.xpath("//body"));
-//	    wd.findElement(By.xpath("//body")).click();
 	}
 
 	public void fillGroupForm(GroupData groupData) {
