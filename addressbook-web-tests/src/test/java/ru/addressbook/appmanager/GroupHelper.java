@@ -1,7 +1,11 @@
 package ru.addressbook.appmanager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import ru.addressbook.model.GroupData;
 
@@ -60,6 +64,18 @@ public class GroupHelper extends HelperBase {
 	public int getGroupCount() {
 		//метод драйвера findElements возвращает список элементов
 		return wd.findElements(By.name("selected[]")).size();
+	}
+
+	public List<GroupData> getGroupList() {
+		List<GroupData> groups = new ArrayList<>();
+		List<WebElement> elements = wd.findElements(By.cssSelector("span.group"));
+		for (WebElement element : elements) {
+			String name = element.getText();
+			int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value"));
+			GroupData group = new GroupData(name, null, null, id);
+			groups.add(group);
+		}
+		return groups;
 	}
 
 }
