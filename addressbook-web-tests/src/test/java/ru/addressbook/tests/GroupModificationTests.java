@@ -7,7 +7,7 @@ import ru.addressbook.model.GroupData;
 public class GroupModificationTests extends TestBase{
 	@Test
 	public void testGroupModification() {
-		am.getNavigationHelper().clickToGroups();
+		am.getNavigationHelper().gotoGroups();
 		am.getGroupHelper().selectGroup();
 		am.getGroupHelper().initGroupModification();
 		am.getGroupHelper().fillGroupForm(new GroupData("test1", "test2", "test3"));
