@@ -2,23 +2,9 @@ package ru.addressbook.model;
 
 public class GroupData {
 	private int id;
-	private final String name;
-	private final String header;
-	private final String footer;
-
-	public GroupData(String name, String header, String footer) {
-		this.name = name;
-		this.header = header;
-		this.footer = footer;
-		this.id = Integer.MAX_VALUE;
-	}
-	
-	public GroupData(String name, String header, String footer, int id) {
-		this.name = name;
-		this.header = header;
-		this.footer = footer;
-		this.id = id;
-	}
+	private String name;
+	private String header;
+	private String footer;
 
 	public String getName() {
 		return name;
@@ -35,6 +21,26 @@ public class GroupData {
 	public int getId() {
 		return id;
 	}
+	
+	public GroupData withName (String name) {
+		this.name = name;
+		return this;
+	}
+	
+	public GroupData withId(int id) {
+		this.id = id;
+		return this;
+	}
+	
+	public GroupData withFooter(String footer) {
+		this.footer = footer;
+		return this;
+	}
+	
+	public GroupData withHeader(String header) {
+		this.header = header;
+		return this;
+	}
 
 	@Override
 	public String toString() {
@@ -45,6 +51,7 @@ public class GroupData {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + id;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -58,15 +65,13 @@ public class GroupData {
 		if (getClass() != obj.getClass())
 			return false;
 		GroupData other = (GroupData) obj;
+		if (id != other.id)
+			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 }

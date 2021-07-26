@@ -1,31 +1,35 @@
 package ru.addressbook.tests;
 
-import java.util.List;
-
-import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import ru.addressbook.model.ContactData;
+import ru.addressbook.model.Contacts;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class ContactDeletionTests extends TestBase {
+	@BeforeMethod
+	public void ensurePreconditions() {
+		am.goTo().home();
+		if (am.contact().all().size() == 0) {
+			am.goTo().addNew();
+			am.contact().create(new ContactData().withFirstName("first name").withLastName("last name")
+					.withEmail("myEmail").withGroup("test1"), true);
+		}
+	}
+	
 	@Test
 	public void testContactDeletion() {
-		am.getNavigationHelper().gotoHome();
-		if (!am.getContactHelper().isThereAContact()) {
-			am.getNavigationHelper().gotoAddNew();
-			am.getContactHelper().createContact(new ContactData("Cvb", "Yui", "cvb@test.com", "test1"), true);
-		}
-		List<ContactData> before = am.getContactHelper().getContactList();
-		am.getContactHelper().selectContact(before.size() - 1);
-		am.getContactHelper().deletSelectedContacts();
-		am.getNavigationHelper().gotoHome();
-		//на getContactList исключение почему-то, связано со списком
-		//он как-будто после проходжения последнего элемента дальше идет, ну и вот
-		List<ContactData> after = am.getContactHelper().getContactList();
-//		Assert.assertEquals(after, before - 1);
-		
-		//ну это тоже не проверяла, потому что на 24 строчке исключение
-		before.remove(before.size() - 1);
-		Assert.assertEquals(before, after);
+		Contacts before = am.contact().all();
+		ContactData cd = before.iterator().next();
+		am.contact().delete(cd);
+		am.goTo().home();
+
+		Contacts after = am.contact().all();
+		assertEquals(after.size(), before.size() - 1);
+		assertThat(after, equalTo(before.without(cd)));
 	}
 }
