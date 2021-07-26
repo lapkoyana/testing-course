@@ -8,7 +8,6 @@ import ru.addressbook.model.Groups;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.assertEquals;
 
 public class GroupModificationTests extends TestBase {
 	@BeforeMethod
@@ -27,8 +26,8 @@ public class GroupModificationTests extends TestBase {
 				.withId(modifiedGroup.getId()).withName("test1")
 				.withHeader("test2").withFooter("test3");
 		am.group().modify(group);
+		assertThat(am.group().count(), equalTo(before.size()));
 		Groups after = am.group().all();
-		assertEquals(after.size(), before.size());
 		assertThat(after, equalTo(before.without(modifiedGroup).withAdded(group)));
 	}
 }
