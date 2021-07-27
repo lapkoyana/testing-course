@@ -1,5 +1,7 @@
 package ru.addressbook.model;
 
+import java.io.File;
+
 public class ContactData {
 	private int id;
 	private String firstName;
@@ -18,6 +20,8 @@ public class ContactData {
 	private String allPhones;
 	
 	private String address;
+	
+	private File photo;
 	
 	public String getFirstName() {
 		return firstName;
@@ -67,6 +71,10 @@ public class ContactData {
 
 	public String getAddress() {
 		return address;
+	}
+
+	public File getPhoto() {
+		return photo;
 	}
 
 	public ContactData withId(int id) {
@@ -126,6 +134,11 @@ public class ContactData {
 	
 	public ContactData withAddress(String address) {
 		this.address = address;
+		return this;
+	}
+
+	public ContactData withPhoto(File photo) {
+		this.photo = photo;
 		return this;
 	}
 	

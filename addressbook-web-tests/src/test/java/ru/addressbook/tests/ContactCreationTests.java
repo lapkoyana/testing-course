@@ -8,13 +8,17 @@ import ru.addressbook.model.Contacts;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
+import java.io.File;
+
 public class ContactCreationTests extends TestBase {
 	@Test
 	public void testAddANewContact() throws Exception {
 		am.goTo().home();
 		Contacts before = am.contact().all();
 		am.goTo().addNew();
-		ContactData cd = new ContactData().withFirstName("fn").withLastName("ln").withGroup("test1");
+		File photo = new File("src/test/resources/romashka.jpg");
+		ContactData cd = new ContactData().withFirstName("fn").withLastName("ln")
+				.withPhoto(photo);
 		am.contact().create(cd, true);
 		assertThat(am.contact().count(), equalTo(before.size() + 1));	
 		Contacts after = am.contact().all();

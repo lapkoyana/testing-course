@@ -28,9 +28,12 @@ public class ContactHelper extends HelperBase {
 	public void fillContactForm(ContactData contactData, boolean creation) {
 		type(By.name("firstname"), contactData.getFirstName());
 		type(By.name("lastname"), contactData.getLastName());
+		attach(By.name("photo"), contactData.getPhoto());
 
 		if (creation) {
-			new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+			if (contactData.getGroup() != null) {
+				new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+			}
 		} else {
 			Assert.assertFalse(isElementPresent(By.name("new_group")));
 		}
@@ -146,14 +149,27 @@ public class ContactHelper extends HelperBase {
 		String allContent = wd.findElement(By.xpath("//div[@id='content']")).getText();
 		
 		String[] content = allContent.split("\n\n");
-
-		String[] namesAndAddress = content[0].split("\n");
-		String[] names = namesAndAddress[0].split(" ");
 		
-		String phoneNumbers = content[1].replaceAll(" ", "").replaceAll("[-()]", "").replaceAll(":", "").replaceAll("[(A-Z)]", "");
+		String[] names = null;
+		String address = null, phoneNumbers = null, emails = null;
+		
+		if (isElementPresent(By.xpath("//div[@id='content']/img"))) {
+			names = content[0].split(" ");
+			address = content[1];
+			
+			phoneNumbers = content[2].replaceAll(" ", "").replaceAll("[-()]", "").replaceAll(":", "").replaceAll("[(A-Z)]", "");
+			emails = content[3];
+		} else {
+			String[] namesAndAddress = content[0].split("\n");
+			names = namesAndAddress[0].split(" ");
+			address = namesAndAddress[1];
+			
+			phoneNumbers = content[1].replaceAll(" ", "").replaceAll("[-()]", "").replaceAll(":", "").replaceAll("[(A-Z)]", "");
+			emails = content[2];
+		}
 		
 		wd.navigate().back();
 		return new ContactData().withId(contact.getId()).withFirstName(names[0]).withLastName(names[1])
-				.withAddress(namesAndAddress[1]).withAllEmails(content[2]).withAllPhones(phoneNumbers);
+				.withAddress(address).withAllEmails(emails).withAllPhones(phoneNumbers);
 	}
 }

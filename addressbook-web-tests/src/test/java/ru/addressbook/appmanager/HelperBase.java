@@ -1,5 +1,7 @@
 package ru.addressbook.appmanager;
 
+import java.io.File;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.NoSuchElementException;
@@ -25,6 +27,12 @@ public class HelperBase {
 				wd.findElement(locator).clear();
 				wd.findElement(locator).sendKeys(text);
 			}
+		}
+	}
+	
+	protected void attach(By locator, File file) {
+		if (file != null) {
+			wd.findElement(locator).sendKeys(file.getAbsolutePath());
 		}
 	}
 
