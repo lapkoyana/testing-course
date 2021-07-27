@@ -52,6 +52,10 @@ public class ContactHelper extends HelperBase {
 	public void gotoEditFormById(int id) {
 		wd.findElement(By.xpath(String.format("//input[@value='%s']/../../td[8]/a", id))).click();
 	}
+	
+	public void gotoDetailsFormById(int id) {
+		wd.findElement(By.xpath(String.format("//input[@value='%s']/../../td[7]/a", id))).click();
+	}
 
 	public void submitContactModification() {
 		click(By.xpath("//div[@id='content']/form/input[22]"));
@@ -134,5 +138,22 @@ public class ContactHelper extends HelperBase {
 				.withMobilePhone(mobile).withWorkPhone(work)
 				.withEmail1(email1).withEmail2(email2).withEmail3(email3)
 				.withAddress(address);
+	}
+
+	//as if all the fields specified on the main page are filled in
+	public ContactData infoFromDetailsForm(ContactData contact) {
+		gotoDetailsFormById(contact.getId());
+		String allContent = wd.findElement(By.xpath("//div[@id='content']")).getText();
+		
+		String[] content = allContent.split("\n\n");
+
+		String[] namesAndAddress = content[0].split("\n");
+		String[] names = namesAndAddress[0].split(" ");
+		
+		String phoneNumbers = content[1].replaceAll(" ", "").replaceAll("[-()]", "").replaceAll(":", "").replaceAll("[(A-Z)]", "");
+		
+		wd.navigate().back();
+		return new ContactData().withId(contact.getId()).withFirstName(names[0]).withLastName(names[1])
+				.withAddress(namesAndAddress[1]).withAllEmails(content[2]).withAllPhones(phoneNumbers);
 	}
 }
