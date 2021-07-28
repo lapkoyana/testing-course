@@ -8,7 +8,8 @@ import ru.addressbook.appmanager.ApplicationManager;
 
 public class TestBase{
 	
-	protected static final ApplicationManager am = new ApplicationManager(BrowserType.FIREFOX);
+	protected static final ApplicationManager am =
+			new ApplicationManager(System.getProperty("browser", BrowserType.FIREFOX));
 
 	@BeforeSuite(alwaysRun = true)
 	public void setUp() throws Exception {

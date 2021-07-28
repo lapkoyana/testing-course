@@ -80,7 +80,6 @@ public class ContactHelper extends HelperBase {
 		fillContactForm(cd, false);
 		submitContactModification();
 		contactCache = null;
-		returnToHomePage();
 	}
 	
 	public void delete(ContactData cd) {

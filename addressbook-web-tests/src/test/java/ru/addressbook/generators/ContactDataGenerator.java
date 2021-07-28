@@ -53,21 +53,21 @@ public class ContactDataGenerator {
 		Gson gson = new GsonBuilder().setPrettyPrinting()
 				.excludeFieldsWithoutExposeAnnotation().create();
 		String json = gson.toJson(contacts);
-		Writer writer = new FileWriter(file);
-		writer.write(json);
-		writer.close();
+		try (Writer writer = new FileWriter(file)) {
+			writer.write(json);
+		}
 	}
 
 	private void saveAsCsv(List<ContactData> contacts, File file) throws IOException {
-		Writer writer = new FileWriter(file);
-		for (ContactData contact : contacts) {
-			writer.write(String.format("%s;%s\n", contact.getFirstName(),
-					contact.getLastName(), contact.getPhoto().getPath()));
-			contact.getPhoto().getCanonicalPath();
-			contact.getPhoto().getAbsolutePath();
-			contact.getPhoto().getPath();
+		try (Writer writer = new FileWriter(file)) {
+			for (ContactData contact : contacts) {
+				writer.write(String.format("%s;%s\n", contact.getFirstName(),
+						contact.getLastName(), contact.getPhoto().getPath()));
+				contact.getPhoto().getCanonicalPath();
+				contact.getPhoto().getAbsolutePath();
+				contact.getPhoto().getPath();
+			}
 		}
-		writer.close();
 	}
 
 	private List<ContactData> generateContacts(int count) {

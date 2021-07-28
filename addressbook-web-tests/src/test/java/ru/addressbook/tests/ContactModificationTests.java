@@ -20,14 +20,14 @@ public class ContactModificationTests extends TestBase {
 		}
 	}
 	
-	@Test(enabled = false)
+	@Test
 	public void testContactModification() {
 		Contacts before = am.contact().all();
 		ContactData modifiedContact = before.iterator().next();
 		ContactData cd = new ContactData().withId(modifiedContact.getId())
-				.withFirstName("firstN").withLastName("lastName");
-		//it doesn't want to be modified!!!
+				.withFirstName("first имя").withLastName("last имя");
 		am.contact().modify(cd);
+		am.goTo().home();
 		assertThat(am.contact().count(), equalTo(before.size()));
 		Contacts after = am.contact().all();
 		assertThat(after, equalTo(before.without(modifiedContact).withAdded(cd)));
