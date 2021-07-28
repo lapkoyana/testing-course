@@ -10,6 +10,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ContactDetailsPageTest extends TestBase{
 	@Test
 	public void testContactDetails() {
+		//it works only if the fields from the main page are filled in
+		//and takes into account the image
 		am.goTo().home();
 		ContactData contact = am.contact().all().iterator().next();
 		ContactData contactInfoFromDetailsForm = am.contact().infoFromDetailsForm(contact);
