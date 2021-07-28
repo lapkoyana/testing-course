@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class GroupCreationTests extends TestBase {
-	
+		
 	@DataProvider
 	public Iterator<Object[]> validGroups() throws IOException{
 		try (BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/groups.xml")))) {
