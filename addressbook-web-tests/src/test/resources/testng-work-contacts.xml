@@ -7,6 +7,7 @@
        <class name="ru.addressbook.tests.ContactEmailTests" />
        <class name="ru.addressbook.tests.ContactAddressTests" />
        <class name="ru.addressbook.tests.ContactModificationTests" />
+       <class name="ru.addressbook.tests.ContactCreationTests" />
     </classes>
   </test>
 </suite>

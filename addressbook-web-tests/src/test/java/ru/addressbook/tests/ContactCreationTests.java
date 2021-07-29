@@ -32,7 +32,6 @@ public class ContactCreationTests extends TestBase {
 				line = reader.readLine();
 			}
 			Gson gson = new Gson();
-			//I'll pretend that it works for me
 			List<ContactData> contacts = gson.fromJson(json, new TypeToken<ArrayList<ContactData>>(){}.getType());
 			return contacts.stream().map((c) -> new Object[] {c}).collect(Collectors.toList()).iterator();
 		}
@@ -41,11 +40,15 @@ public class ContactCreationTests extends TestBase {
 	@Test(dataProvider = "validContacts")
 	public void testAddANewContact(ContactData cd) throws Exception {
 		am.goTo().home();
-		Contacts before = am.contact().all();
+		Contacts before = am.db().contacts();
 		am.goTo().addNew();
 		am.contact().create(cd, true);
 		assertThat(am.contact().count(), equalTo(before.size() + 1));	
-		Contacts after = am.contact().all();
+		Contacts after = am.db().contacts();
+		System.out.println("Список после - " + after);
+		System.out.println("Список до с добавленным элементом - " + before.withAdded(
+				cd.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt())));
+		System.out.println("Новый элемент для сравнения - " + cd.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()));
 		assertThat(after, equalTo(before.withAdded(
 				cd.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));
 	}

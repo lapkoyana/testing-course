@@ -1,5 +1,6 @@
 package ru.addressbook.tests;
 
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import ru.addressbook.model.ContactData;
@@ -11,13 +12,24 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class ContactEmailTests extends TestBase{
+	
+	@BeforeMethod
+	public void ensurePreconditions() {
+		if (am.db().contacts().size() == 0) {
+			am.goTo().home();
+			am.goTo().addNew();
+			am.contact().create(new ContactData().withFirstName("first name")
+					.withLastName("last name").withEmail1("email1").withEmail3("email3"), true);
+		}
+	}
+	
 	@Test
 	public void testContactEmails() {
 		am.goTo().home();
-		ContactData contact = am.contact().all().iterator().next();
+		ContactData contact = am.db().contacts().iterator().next();
 		ContactData contactInfoFromEditForm = am.contact().infoFromEditForm(contact);
 		
-		assertThat(contact.getAllEmails(), equalTo(mergeEmails(contactInfoFromEditForm)));
+		assertThat(mergeEmails(contact), equalTo(mergeEmails(contactInfoFromEditForm)));
 		
 	}
 

@@ -39,10 +39,10 @@ public class GroupCreationTests extends TestBase {
 	@Test(dataProvider = "validGroups")
 	public void testGroupCreation(GroupData group){
 		am.goTo().groups();
-		Groups before = am.group().all();
+		Groups before = am.db().groups();
 		am.group().create(group);
 		assertThat(am.group().count(), equalTo(before.size() + 1));
-		Groups after = am.group().all();
+		Groups after = am.db().groups();
 		assertThat(after, equalTo(before.withAdded(
 				group.withId(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
 	}
@@ -50,11 +50,11 @@ public class GroupCreationTests extends TestBase {
 	@Test
 	public void testBadGroupCreation() throws Exception {
 		am.goTo().groups();
-		Groups before = am.group().all();
+		Groups before = am.db().groups();
 		GroupData group = new GroupData().withName("test1'");
 		am.group().create(group);
 		assertThat(am.group().count(), equalTo(before.size()));
-		Groups after = am.group().all();
+		Groups after = am.db().groups();
 		assertThat(after, equalTo(before));
 	}
 }

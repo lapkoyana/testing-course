@@ -12,22 +12,23 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class ContactDeletionTests extends TestBase {
 	@BeforeMethod
 	public void ensurePreconditions() {
-		am.goTo().home();
-		if (am.contact().all().size() == 0) {
+		if (am.db().contacts().size() == 0) {
+			am.goTo().home();
 			am.goTo().addNew();
 			am.contact().create(new ContactData().withFirstName("first name")
-					.withLastName("last name").withGroup("test1"), true);
+					.withLastName("last name"), true);
 		}
 	}
 	
 	@Test
 	public void testContactDeletion() {
-		Contacts before = am.contact().all();
+		//for me, this test only works in debug mode
+		Contacts before = am.db().contacts();
 		ContactData cd = before.iterator().next();
 		am.contact().delete(cd);
 		am.goTo().home();
 		assertThat(am.contact().count(), equalTo(before.size() - 1));
-		Contacts after = am.contact().all();
+		Contacts after = am.db().contacts();
 		assertThat(after, equalTo(before.without(cd)));
 	}
 }

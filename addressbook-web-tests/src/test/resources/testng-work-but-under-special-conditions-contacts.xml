@@ -4,7 +4,6 @@
   <test name="Contacts - tests that work but under special conditions" >
     <classes>
        <class name="ru.addressbook.tests.ContactDeletionTests" />
-       <class name="ru.addressbook.tests.ContactCreationTests" />
        <class name="ru.addressbook.tests.ContactDetailsPageTest" />
     </classes>
   </test>
