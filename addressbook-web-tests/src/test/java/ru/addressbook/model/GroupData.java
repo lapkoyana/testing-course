@@ -1,8 +1,15 @@
 package ru.addressbook.model;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
@@ -33,6 +40,11 @@ public class GroupData {
 	@Column(name = "group_footer")
 	@Type(type = "text")
 	private String footer;
+	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "address_in_groups", joinColumns = @JoinColumn(name = "group_id"),
+	inverseJoinColumns = @JoinColumn(name = "id"))
+	private Set<ContactData> contacts = new HashSet<>();
 
 	public String getName() {
 		return name;
@@ -48,6 +60,10 @@ public class GroupData {
 
 	public int getId() {
 		return id;
+	}
+	
+	public Contacts getContacts() {
+		return new Contacts(contacts);
 	}
 	
 	public GroupData withName (String name) {
@@ -114,4 +130,5 @@ public class GroupData {
 			return false;
 		return true;
 	}
+
 }

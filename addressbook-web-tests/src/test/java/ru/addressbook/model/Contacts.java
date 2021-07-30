@@ -55,4 +55,10 @@ public class Contacts extends ForwardingSet<ContactData>{
 		contacts.remove(cd);
 		return contacts;
 	}
+
+	public Contacts withAdded(ContactData contact, GroupData group) {
+		Contacts contacts = new Contacts(this);
+		contact.inGroup(group);
+		return contacts;
+	}
 }

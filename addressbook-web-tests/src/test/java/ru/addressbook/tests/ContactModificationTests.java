@@ -15,8 +15,7 @@ public class ContactModificationTests extends TestBase {
 		if (am.db().contacts().size() == 0) {
 			am.goTo().home();
 			am.goTo().addNew();
-			am.contact().create(new ContactData().withFirstName("first name").withLastName("last name")
-					.withGroup("test1"), true);
+			am.contact().create(new ContactData().withFirstName("first name").withLastName("last name"), true);
 		}
 	}
 	

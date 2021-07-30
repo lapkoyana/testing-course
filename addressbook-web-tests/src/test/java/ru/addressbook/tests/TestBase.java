@@ -5,6 +5,13 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
 import ru.addressbook.appmanager.ApplicationManager;
+import ru.addressbook.model.GroupData;
+import ru.addressbook.model.Groups;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.util.stream.Collectors;
 
 public class TestBase{
 	
@@ -21,4 +28,14 @@ public class TestBase{
 		am.stop();
 	  }
 
+	public void verifyGroupListInIU() {
+		if (Boolean.getBoolean("verifyUI")) {
+			Groups dbGroups = am.db().groups();
+			Groups uiGroups = am.group().all();
+			
+			assertThat(uiGroups, equalTo(dbGroups.stream()
+						.map((g) -> new GroupData().withId(g.getId()).withName(g.getName()))
+						.collect(Collectors.toSet())));
+		}
+	}
 }

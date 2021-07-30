@@ -1,10 +1,16 @@
 package ru.addressbook.model;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -42,9 +48,6 @@ public class ContactData {
 	@Transient
 	private String allEmails;
 	
-	@Transient
-	private String group;
-	
 	@Column(name = "home")
 	@Type(type = "text")
 	private String homePhone;
@@ -68,6 +71,11 @@ public class ContactData {
 	@Type(type = "text")
 	private String photo;
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "address_in_groups", joinColumns = @JoinColumn(name = "id"),
+			inverseJoinColumns = @JoinColumn(name = "group_id"))
+	private Set<GroupData> groups = new HashSet<>();
+	
 	public String getFirstName() {
 		return firstName;
 	}
@@ -84,10 +92,6 @@ public class ContactData {
 	}
 	public String getEmail3() {
 		return email3;
-	}
-
-	public String getGroup() {
-		return group;
 	}
 	
 	public String getAllEmails() {
@@ -125,6 +129,10 @@ public class ContactData {
 		else return null;
 	}
 
+	public Groups getGroups() {
+		return new Groups(groups);
+	}
+
 	public ContactData withId(int id) {
 		this.id = id;
 		return this;
@@ -152,11 +160,6 @@ public class ContactData {
 	
 	public ContactData withEmail3(String email3) {
 		this.email3 = email3;
-		return this;
-	}
-	
-	public ContactData withGroup(String group) {
-		this.group = group;
 		return this;
 	}
 	
@@ -196,14 +199,6 @@ public class ContactData {
 	}
 
 	@Override
-	public String toString() {
-		return "ContactData [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email1=" + email1
-				+ ", email2=" + email2 + ", email3=" + email3 + ", group=" + group + ", homePhone=" + homePhone
-				+ ", mobilePhone=" + mobilePhone + ", workPhone=" + workPhone + ", address=" + address + ", photo="
-				+ photo + "]\n";
-	}
-
-	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
@@ -212,7 +207,7 @@ public class ContactData {
 		result = prime * result + ((email2 == null) ? 0 : email2.hashCode());
 		result = prime * result + ((email3 == null) ? 0 : email3.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
-		result = prime * result + ((group == null) ? 0 : group.hashCode());
+		result = prime * result + ((groups == null) ? 0 : groups.hashCode());
 		result = prime * result + ((homePhone == null) ? 0 : homePhone.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
@@ -255,10 +250,10 @@ public class ContactData {
 				return false;
 		} else if (!firstName.equals(other.firstName))
 			return false;
-		if (group == null) {
-			if (other.group != null)
+		if (groups == null) {
+			if (other.groups != null)
 				return false;
-		} else if (!group.equals(other.group))
+		} else if (!groups.equals(other.groups))
 			return false;
 		if (homePhone == null) {
 			if (other.homePhone != null)
@@ -284,4 +279,17 @@ public class ContactData {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "ContactData [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email1=" + email1
+				+ ", email2=" + email2 + ", email3=" + email3 + ", homePhone=" + homePhone + ", mobilePhone="
+				+ mobilePhone + ", workPhone=" + workPhone + ", address=" + address + "\n]";
+	}
+
+	public ContactData inGroup(GroupData group) {
+		groups.add(group);
+		return this;
+	}
+	
 }

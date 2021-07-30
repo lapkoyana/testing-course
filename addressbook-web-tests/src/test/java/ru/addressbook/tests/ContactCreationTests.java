@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 
 import ru.addressbook.model.ContactData;
 import ru.addressbook.model.Contacts;
+import ru.addressbook.model.Groups;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -33,6 +34,15 @@ public class ContactCreationTests extends TestBase {
 			}
 			Gson gson = new Gson();
 			List<ContactData> contacts = gson.fromJson(json, new TypeToken<ArrayList<ContactData>>(){}.getType());
+			int i = 1;
+			
+			//надо это исправить
+			
+			Groups groups = am.db().groups();
+			for (ContactData contact : contacts) {
+				contact.withPhoto(new File(String.format("src/test/resources/romashka%s.jpg", i))).inGroup(groups.iterator().next());
+				i++;
+			}
 			return contacts.stream().map((c) -> new Object[] {c}).collect(Collectors.toList()).iterator();
 		}
 	}

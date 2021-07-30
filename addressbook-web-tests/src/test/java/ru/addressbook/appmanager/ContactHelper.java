@@ -10,6 +10,7 @@ import org.testng.Assert;
 
 import ru.addressbook.model.ContactData;
 import ru.addressbook.model.Contacts;
+import ru.addressbook.model.GroupData;
 
 public class ContactHelper extends HelperBase {
 
@@ -19,6 +20,14 @@ public class ContactHelper extends HelperBase {
 
 	public void submitContactCreation() {
 		click(By.xpath("//div[@id='content']/form/input[21]"));
+	}
+	
+	private void submitOfAddingAContactToTheGroup() {
+		click(By.xpath("//input[@name='add']"));
+	}
+	
+	private void submitDeletion() {
+	    wd.findElement(By.xpath("//input[@name='remove']")).click();
 	}
 	
 	public int count() {
@@ -43,8 +52,9 @@ public class ContactHelper extends HelperBase {
 			attach(By.name("photo"), contactData.getPhoto());
 		}
 		if (creation) {
-			if (contactData.getGroup() != null) {
-				new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+			if (contactData.getGroups().size() != 0) {
+				Assert.assertTrue(contactData.getGroups().size() == 1);
+				new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroups().iterator().next().getName());
 			}
 		} else {
 			Assert.assertFalse(isElementPresent(By.name("new_group")));
@@ -57,6 +67,16 @@ public class ContactHelper extends HelperBase {
 	
 	private void selectById(int id) {
 		wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+	}
+	
+	private void selectGroup(String groupName) {
+		wd.findElement(By.xpath("//select[@name='to_group']")).click();
+	    new Select(wd.findElement(By.xpath("//select[@name='to_group']"))).selectByVisibleText(groupName);	    
+	}
+	
+	private void selectGroupWhenDeleting(String groupName) {
+		wd.findElement(By.name("group")).click();
+	    new Select(wd.findElement(By.name("group"))).selectByVisibleText(groupName);
 	}
 
 	public void deletSelected() {
@@ -71,6 +91,10 @@ public class ContactHelper extends HelperBase {
 	public void gotoDetailsFormById(int id) {
 		wd.findElement(By.xpath(String.format("//input[@value='%s']/../../td[7]/a", id))).click();
 	}
+	
+	private void goToTheContactListOfThisGroup(String groupName) {
+	    wd.findElement(By.linkText("group page \"" + groupName + "\"")).click();
+	}
 
 	public void submitContactModification() {
 		click(By.xpath("//div[@id='content']/form/input[22]"));
@@ -78,6 +102,21 @@ public class ContactHelper extends HelperBase {
 
 	public void returnToHomePage() {
 		click(By.linkText("home page"));
+	}
+	
+	public void addGroup(ContactData contact, GroupData group) {
+		selectById(contact.getId());
+		selectGroup(group.getName());
+		submitOfAddingAContactToTheGroup();
+		goToTheContactListOfThisGroup(group.getName());
+	}
+	
+	public void deleteFromGroup(ContactData contact, GroupData group) {
+		selectGroupWhenDeleting(group.getName());
+//	    wd.findElement(By.xpath("//form[@id='right']/select/option[3]")).click();
+		selectById(contact.getId());
+		submitDeletion();
+		goToTheContactListOfThisGroup(group.getName());
 	}
 
 	public void create(ContactData contactData, boolean b) {
