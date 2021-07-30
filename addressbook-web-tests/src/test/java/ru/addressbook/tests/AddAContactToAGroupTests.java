@@ -11,10 +11,6 @@ import ru.addressbook.model.Groups;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 public class AddAContactToAGroupTests extends TestBase{
 	@BeforeMethod
 	public void ensurePreconditions() {

@@ -21,6 +21,8 @@ public class ContactModificationTests extends TestBase {
 	
 	@Test
 	public void testContactModification() {
+		//it does not take into account groups
+		//the test will fail if the group that is being modified has contacts
 		Contacts before = am.db().contacts();
 		ContactData modifiedContact = before.iterator().next();
 		ContactData cd = new ContactData().withId(modifiedContact.getId())

@@ -36,8 +36,6 @@ public class ContactCreationTests extends TestBase {
 			List<ContactData> contacts = gson.fromJson(json, new TypeToken<ArrayList<ContactData>>(){}.getType());
 			int i = 1;
 			
-			//надо это исправить
-			
 			Groups groups = am.db().groups();
 			for (ContactData contact : contacts) {
 				contact.withPhoto(new File(String.format("src/test/resources/romashka%s.jpg", i))).inGroup(groups.iterator().next());
@@ -55,10 +53,6 @@ public class ContactCreationTests extends TestBase {
 		am.contact().create(cd, true);
 		assertThat(am.contact().count(), equalTo(before.size() + 1));	
 		Contacts after = am.db().contacts();
-		System.out.println("Список после - " + after);
-		System.out.println("Список до с добавленным элементом - " + before.withAdded(
-				cd.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt())));
-		System.out.println("Новый элемент для сравнения - " + cd.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()));
 		assertThat(after, equalTo(before.withAdded(
 				cd.withId(after.stream().mapToInt((c) -> c.getId()).max().getAsInt()))));
 	}

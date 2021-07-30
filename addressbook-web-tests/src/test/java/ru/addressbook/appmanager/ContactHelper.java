@@ -113,7 +113,6 @@ public class ContactHelper extends HelperBase {
 	
 	public void deleteFromGroup(ContactData contact, GroupData group) {
 		selectGroupWhenDeleting(group.getName());
-//	    wd.findElement(By.xpath("//form[@id='right']/select/option[3]")).click();
 		selectById(contact.getId());
 		submitDeletion();
 		goToTheContactListOfThisGroup(group.getName());

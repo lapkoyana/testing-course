@@ -61,4 +61,12 @@ public class Contacts extends ForwardingSet<ContactData>{
 		contact.inGroup(group);
 		return contacts;
 	}
+
+	public Contacts without(ContactData contact, GroupData group) {
+		Contacts contacts = new Contacts(this);
+		contacts.remove(contact);
+		contact.removeGroup(group);
+		contacts.add(contact);
+		return contacts;
+	}
 }

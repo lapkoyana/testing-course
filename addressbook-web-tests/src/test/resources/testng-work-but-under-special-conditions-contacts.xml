@@ -5,6 +5,7 @@
     <classes>
        <class name="ru.addressbook.tests.ContactDeletionTests" />
        <class name="ru.addressbook.tests.ContactDetailsPageTest" />
+       <class name="ru.addressbook.tests.AddAContactToAGroupTests" />
     </classes>
   </test>
 </suite>

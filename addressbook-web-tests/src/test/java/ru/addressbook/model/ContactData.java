@@ -1,6 +1,7 @@
 package ru.addressbook.model;
 
 import java.io.File;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Type;
@@ -23,7 +26,7 @@ import com.google.gson.annotations.Expose;
 public class ContactData {
 	@Id
 	@Column(name = "id")
-	private int id;
+	private int id = Integer.MAX_VALUE;
 	
 	@Expose
 	@Column(name = "firstname")
@@ -70,6 +73,10 @@ public class ContactData {
 	@Column(name = "photo")
 	@Type(type = "text")
 	private String photo;
+	
+	@Column(name = "deprecated", columnDefinition="DATETIME")
+	@Temporal(TemporalType.DATE)
+	private Date deprecated;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "address_in_groups", joinColumns = @JoinColumn(name = "id"),
@@ -127,6 +134,10 @@ public class ContactData {
 			return new File(photo);
 		}
 		else return null;
+	}
+
+	public Date getDeprecated() {
+		return deprecated;
 	}
 
 	public Groups getGroups() {
@@ -289,6 +300,11 @@ public class ContactData {
 
 	public ContactData inGroup(GroupData group) {
 		groups.add(group);
+		return this;
+	}
+	
+	public ContactData removeGroup(GroupData group) {
+		groups.remove(group);
 		return this;
 	}
 	

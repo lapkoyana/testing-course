@@ -12,7 +12,6 @@ import ru.addressbook.model.GroupData;
 import ru.addressbook.model.Groups;
 
 public class DeleteAContactFromAGroupTests extends TestBase{
-	//it doesn't work yet
 	
 	@BeforeMethod
 	public void ensurePreconditions() {
@@ -23,14 +22,21 @@ public class DeleteAContactFromAGroupTests extends TestBase{
 			//creating a new contact if there are no contacts
 			am.goTo().home();
 			am.goTo().addNew();
-			ContactData contact = new ContactData().withFirstName("first name").withLastName("last name");
-			am.contact().create(contact, true);
+			ContactData newContact = new ContactData().withFirstName("first name").withLastName("last name");
+			am.contact().create(newContact, true);
 						
+			contacts = am.db().contacts();
+			ContactData contact = contacts.iterator().next();
 			if (groups.size() == 0) {
 				//adding a contact to a new group, because there were no groups
 				am.goTo().groups();
 				GroupData group = new GroupData().withName("TEST1");
 				am.group().create(group);
+				
+				am.goTo().home();
+				
+				groups = am.db().groups();
+				group = groups.iterator().next();
 				
 				am.contact().addGroup(contact, group);
 				isContactInSomeGroup = true;
@@ -57,7 +63,7 @@ public class DeleteAContactFromAGroupTests extends TestBase{
 			int contactHasBeenAddedToSomeGroup = 0;
 			for (ContactData c : contacts) {
 				if (c.getGroups().size() != 0) {
-					contactHasBeenAddedToSomeGroup++;//можем здесь в принципе выходить из цикла, если нашли
+					contactHasBeenAddedToSomeGroup++;
 				}
 			}
 			if (contactHasBeenAddedToSomeGroup == 0) {
@@ -77,14 +83,23 @@ public class DeleteAContactFromAGroupTests extends TestBase{
 		Groups groups = am.db().groups();
 		
 		GroupData group = null;
-		
+		Contacts contactsOfThisGroup = null;
+
 		for (GroupData g : groups) {
-			if (g.getContacts().size() != 0) {
+			Contacts allContactsOfThisGroup = g.getContacts();
+			contactsOfThisGroup = new Contacts();
+			for (ContactData c : allContactsOfThisGroup) {
+				if (c.getDeprecated() == null) {
+					contactsOfThisGroup.add(c);
+				}
+			}
+			if (contactsOfThisGroup.size() != 0) {
 				group = g;
+				break;
 			}
 		}
 		
-		ContactData contact = group.getContacts().iterator().next();
+		ContactData contact = contactsOfThisGroup.iterator().next();
 		
 		am.contact().deleteFromGroup(contact, group);
 		
@@ -92,6 +107,8 @@ public class DeleteAContactFromAGroupTests extends TestBase{
 		
 		Contacts after = am.db().contacts();
 		
-		assertThat(after, equalTo(before.withAdded(contact, group)));
+		Contacts beforeWithout = before.without(contact, group);
+		
+		assertThat(after, equalTo(beforeWithout));
 	}
 }
