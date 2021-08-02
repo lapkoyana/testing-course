@@ -1,8 +1,10 @@
 package ru.addressbook.tests;
 
 import org.openqa.selenium.remote.BrowserType;
+import org.testng.ITestContext;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Listeners;
 
 import ru.addressbook.appmanager.ApplicationManager;
 import ru.addressbook.model.GroupData;
@@ -13,14 +15,16 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.util.stream.Collectors;
 
+@Listeners(MyTestListener.class)
 public class TestBase{
 	
 	protected static final ApplicationManager am =
 			new ApplicationManager(System.getProperty("browser", BrowserType.FIREFOX));
 
 	@BeforeSuite(alwaysRun = true)
-	public void setUp() throws Exception {
+	public void setUp(ITestContext context) throws Exception {
 	    am.init();
+	    context.setAttribute("am", am);
 	}
 
 	@AfterSuite(alwaysRun = true)
