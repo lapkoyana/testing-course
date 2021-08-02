@@ -8,6 +8,7 @@
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
     <selenium.test.browser>firefox</selenium.test.browser>
+    <selenium.test.target>local</selenium.test.target>
   </properties>
   
   <dependencies>
